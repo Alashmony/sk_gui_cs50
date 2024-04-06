@@ -21,6 +21,11 @@ def home():
     return render_template("home.html")
 
 
+@app.route("/manipulate", methods=["GET", "POST"])
+def manipulate():
+    return render_template("manipulate.html")
+
+
 @app.route("/upload", methods=["GET", "POST"])
 def upload():
     if request.method == "POST":
