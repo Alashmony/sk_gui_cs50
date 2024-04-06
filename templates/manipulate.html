@@ -1,17 +1,47 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Upload dataset
+Manipulate data
 {% endblock %}
 
 {% block main %}
 {% if file %}
 
-<h1 class="h1">{{ file }} is now uploaded as a dataframe</h1>
-<p class="lead">Keep going and start <a type="button" class="btn btn-dark" href="/explore">Exploring the data</a>, this
-    might take a while
-</p>
+<script>
+    function getMethodDescription(descriptions) {
 
+        var selectElement = document.getElementById("choose_method").value;
+
+        // Update the description based on the selected value
+        document.getElementById("method_description").innerHTML = descriptions[selectElement]["description"];
+        document.getElementById("method_args").innerHTML = descriptions[selectElement]["args"];
+    }
+</script>
+
+<h1 class="h1">To manipulate data, choose the steps you need to do</h1>
+<table class="table table-striped">
+    <tr>
+        <th>Function</th>
+        <th>Arguments</th>
+        <th>Description</th>
+    </tr>
+    <tr>
+        <td>
+            <div>
+                <select id="choose_method" class="custom-select" onchange="getMethodDescription( {{ descriptions }})">
+                    {% for method_ in methods_ %}
+                    <option value={{ method_ }}>{{ method_ }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </td>
+        <td>
+            <p class="lead" id="method_args"></p>
+        </td>
+        <td style="font-size: 10px !important;" id="method_description">
+        </td>
+    </tr>
+</table>
 {% if rows and columns %}
 <table class="table table-dark table-striped table-hover">
     <tr>

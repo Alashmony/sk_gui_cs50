@@ -3,7 +3,7 @@ from flask_session import Session
 from werkzeug.utils import secure_filename
 import pandas as pd
 import uuid
-import helpers
+from helpers import *
 import os
 from ydata_profiling import ProfileReport
 from bs4 import BeautifulSoup
@@ -38,11 +38,21 @@ def home():
 
 @app.route("/manipulate", methods=["GET", "POST"])
 def manipulate():
-    df = session["df"]["v0"]
-    rows = df.head(10).to_dict(orient="records")
-    columns = list(session["df"]["v0"].columns)
-    file = session["filename"]
-    return render_template("manipulate.html", file=file, rows=rows, columns=columns)
+    if request.method == "GET":
+        df = session["df"]["v0"]
+        rows = df.head(10).to_dict(orient="records")
+        columns = list(session["df"]["v0"].columns)
+        file = session["filename"]
+
+        methods_ = get_methods(df)
+        return render_template(
+            "manipulate.html",
+            file=file,
+            rows=rows,
+            columns=columns,
+            methods_=methods_.keys(),
+            descriptions=methods_,
+        )
 
 
 @app.route("/explore")

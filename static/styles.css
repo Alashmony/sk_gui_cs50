@@ -26,28 +26,35 @@ footer {
     left: 0;
     bottom: 0;
     width: 100%;
-    padding: 15px;
-    margin-top: 15px;
+    padding: 10px;
+    margin-top: 5px;
+    border: white;
+    border-top-width: 5px;
 }
 
 .footerp {
     text-align: center;
     color: White;
-    font-size: 20px;
+    font-size: 10px;
 }
 
 .footerl {
     text-align: center;
-    padding: 5px;
+    padding: 3px;
 }
 
 .footerico {
-    width="32px;"
-    height="32px;
+    width: "20px";
+    height: "20px";
 
 }
 
 .bodym {
     margin-bottom: 150px !important;
     padding-top: 0px !important;
+}
+
+.headimg {
+    -webkit-filter: drop-shadow(2px 2px 0 white) drop-shadow(-2px -2px 0 white);
+    filter: drop-shadow(2px 2px 0 white) drop-shadow(-2px -2px 0 white);
 }
