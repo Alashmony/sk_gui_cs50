@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Explore data
+{% endblock %}
+
+{% block main %}
+
+<h1 class="h1">Here is an overview of the data provided</h1>
+<p class="lead">Now, you can <a href="/manipulate" class="btn btn-dark">manipulate data</a>
+<p>
+<p class="lead" style="font-size: 10px !important;">Powered by <a href="https://github.com/ydataai/ydata-profiling"
+                class="text-primary" style="font-size: 10px !important;">ydata-profiling</a>
+</p>
+
+{% if report %}
+{% include report with context %}
+<!--<embed type="text/html" src={{ report }} width="100%">-->
+
+{% endif %}
+<!--<p class="lead">Keep going and start <a type="button" class="btn btn-dark" href="/manipulate">manipulating the data</a>
+</p>-->
+
+{% if error %}
+<p class="lead" style="color: red">{{ error }}</p>
+{% endif %}
+
+{% endblock %}

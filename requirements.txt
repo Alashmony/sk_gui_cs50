@@ -1,6 +1,18 @@
 flask
+jinja2
 pandas
+numpy==1.23.1
+# pandas_profiling
+ydata-profiling
+beautifulsoup4
+numba==0.58.1
 flask_session
 scikit-learn
 openpyxl
 xlrd
+# levenshtein
+# regex
+# dataprep    
+duckdb
+sqlalchemy
+markupsafe==2.0.1
