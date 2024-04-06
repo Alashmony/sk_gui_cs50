@@ -10,10 +10,11 @@ Home
 
 {% if not username %}
 <img src="static/Alashmony.png" alt="Ahmad Alashmony" width="20%" height="20%" style="margin:10px 0px">
-<p class="lead">To start, you must <a type="button" href="/login" class="btn btn-dark">Login</a></p>
+<p class="lead">To start, you must <a type="button" href="/upload" class="btn btn-dark">upload your dataset</a></p>
 {% endif %}
 <h2>{{ notification }}</h2>
 
+<!--
 {% if username %}
 <table class="table table-striped">
     <tr>
@@ -29,29 +30,7 @@ Home
         <td>{{ portfolio }}</td>
     </tr>
 </table>
-{% endif %}
+{% endif %}-->
 
-{% if stocks %}
-<table class="table table-striped table-dark">
-    <tr>
-        <th>Stock Symbol</th>
-        <th>Amount in hand</th>
-        <th>Current value</th>
-        <!--<th>Total buy price</th>-->
-        <th>Total value</th>
-        <!--<th>Stock Profit / Loss</th>-->
-    </tr>
-    {% for stock in stocks %}
-    <tr>
-        <td>{{ stock.stock }}</td>
-        <td>{{ stock.amount }}</td>
-        <td>{{ stock.price }}</td>
-        <!--<td>{{ stock.buy_price }} </td>-->
-        <td>{{ stock.total }}</td>
-        <!--<td>{{ stock.prof_loss }}</td>-->
-    </tr>
-    {% endfor %}
-</table>
-{% endif %}
 
 {% endblock %}

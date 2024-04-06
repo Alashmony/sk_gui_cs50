@@ -24,37 +24,38 @@
 </head>
 
 <body class="bodym">
-    <nav class="bg-dark navbar navbar-expand-md navbar-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <img src="static/sklearn.png" alternative="SkiKit-Learn" width="5%;" height="5%;">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
-                <img src="static/sklearn.png" alternative="SkiKit-Learn GUI" width="5%;" height="5%;">
                 <span class="red">with a GUI</span>
             </a>
-            <button aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler"
-                data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <img src="static/palestine.png" height="50px" width="">
-            <img src="static/egypt.svg" height="50px" style="margin-right: 20px;">
             <div class="collapse navbar-collapse" id="navbar">
-                {% if session["user_id"] %}
-                <ul class="navbar navbar-dark bg-dark me-auto mt-2">
-                    <li class="nav-item"><a class="nav-link" href="/upload">Upload Dataset</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/manipulate">Manipulate data</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/train">Train a model</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/evaluate">Evaluate the model</a></li>
+                {% if not user_id %}
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item"><a class="nav-link" href="/upload">Upload Dataset</a></li>|
+                    <li class="nav-item"><a class="nav-link" href="/manipulate">Manipulate data</a></li>|
+                    <li class="nav-item"><a class="nav-link" href="/train">Train a model</a></li>|
+                    <li class="nav-item"><a class="nav-link" href="/evaluate">Evaluate the model</a></li>|
                     <li class="nav-item"><a class="nav-link" href="/predict">Make a prediction</a></li>
                 </ul>
-                <ul class="navbar-nav ms-auto mt-2">
+
+                <!--<ul class="navbar-nav ms-auto mt-2">
                     <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
-                </ul>
+                </ul>-->
                 {% else %}
-                <ul class="navbar-nav ms-auto mt-2">
+                <!--<ul class="navbar-nav ms-auto mt-2">
                     <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
                     <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-                </ul>
+                </ul>-->
                 {% endif %}
             </div>
+            <img src="static/palestine.png" height="50px" width="">
+            <img src="static/egypt.svg" height="50px" style="margin-right: 20px;">
         </div>
     </nav>
 
