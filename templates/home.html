@@ -1,0 +1,50 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block main %}
+<h2>{{ notification }}</h2>
+
+{% if username %}
+<table class="table table-striped">
+    <tr>
+        <th>Username</th>
+        <th>Cash</th>
+        <th>Total Stocks</th>
+        <th>Total Wealth</th>
+    </tr>
+    <tr>
+        <td>{{ username }}</td>
+        <td>{{ cash }}</td>
+        <td>{{ total_stocks }}</td>
+        <td>{{ portfolio }}</td>
+    </tr>
+</table>
+{% endif %}
+
+{% if stocks %}
+<table class="table table-striped table-dark">
+    <tr>
+        <th>Stock Symbol</th>
+        <th>Amount in hand</th>
+        <th>Current value</th>
+        <!--<th>Total buy price</th>-->
+        <th>Total value</th>
+        <!--<th>Stock Profit / Loss</th>-->
+    </tr>
+    {% for stock in stocks %}
+    <tr>
+        <td>{{ stock.stock }}</td>
+        <td>{{ stock.amount }}</td>
+        <td>{{ stock.price }}</td>
+        <!--<td>{{ stock.buy_price }} </td>-->
+        <td>{{ stock.total }}</td>
+        <!--<td>{{ stock.prof_loss }}</td>-->
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% endblock %}
