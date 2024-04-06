@@ -1,13 +1,16 @@
 {% extends "layout.html" %}
 
 {% block title %}
-Manipulate the data
+Upload dataset
 {% endblock %}
 
 {% block main %}
+{% if file %}
 
-<h1 class="h1">Your dataframe is ready to be manipulated</h1>
-<p class="lead" style="margin-bottom: 50px;">Data statistics are below</p>
+<h1 class="h1">{{ file }} is now uploaded as a dataframe</h1>
+<p class="lead">Keep going and start <a type="button" class="btn btn-dark" href="/explore">Exploring the data</a>, this
+    might take a while
+</p>
 
 {% if rows and columns %}
 <table class="table table-dark table-striped table-hover">
@@ -25,11 +28,12 @@ Manipulate the data
     {% endfor %}
 </table>
 {% endif %}
-<!--<p class="lead">Keep going and start <a type="button" class="btn btn-dark" href="/manipulate">manipulating the data</a>
-</p>-->
+
+{% else %}
 
 {% if error %}
 <p class="lead" style="color: red">{{ error }}</p>
 {% endif %}
 
+{% endif %}
 {% endblock %}

@@ -48,5 +48,6 @@ footer {
 }
 
 .bodym {
-    margin-bottom: 150px;
+    margin-bottom: 150px !important;
+    padding-top: 0px !important;
 }

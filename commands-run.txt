@@ -2,4 +2,10 @@
 # export FLASK_DEBUG=1
 # flask run
 # flask --app sample --debug run
-flask run --reload --debug
+# flask run --reload --debug
+# Microsoft Visual C++ 14.0
+vs_buildtools.exe --norestart --passive --downloadThenInstall --includeRecommended --add Microsoft.VisualStudio.Workload.NativeDesktop --add Microsoft.VisualStudio.Workload.VCTools --add Microsoft.VisualStudio.Workload.MSBuildTools
+# flask run --debugger --reload 
+$env:FLASK_DEBUG = 1
+$env:FLASK_ENV = "development"
+flask run 
