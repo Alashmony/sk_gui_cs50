@@ -57,5 +57,4 @@ def upload():
         rows = df.head(10).to_dict(orient="records")
         # print(rows)
         return render_template("upload.html", file=filename, columns=columns, rows=rows)
-
     return render_template("upload.html", exts=accepted_ext)
