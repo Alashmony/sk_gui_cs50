@@ -5,6 +5,13 @@ Home
 {% endblock %}
 
 {% block main %}
+<h1 class="h1">Welcome to SkiKit-Learn GUI!</h1>
+<p class="lead">The final project for CS50 by Ahmad Aalashmony</p>
+
+{% if not username %}
+<img src="static/Alashmony.png" alt="Ahmad Alashmony" width="20%" height="20%" style="margin:10px 0px">
+<p class="lead">To start, you must <a type="button" href="/login.html" class="btn btn-dark">Login</a></p>
+{% endif %}
 <h2>{{ notification }}</h2>
 
 {% if username %}
@@ -15,7 +22,7 @@ Home
         <th>Total Stocks</th>
         <th>Total Wealth</th>
     </tr>
-    <tr>
+    <tr width="25%" height="25%">
         <td>{{ username }}</td>
         <td>{{ cash }}</td>
         <td>{{ total_stocks }}</td>

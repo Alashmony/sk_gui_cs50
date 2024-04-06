@@ -23,8 +23,7 @@
 
 </head>
 
-<body>
-
+<body class="bodym">
     <nav class="bg-dark navbar navbar-expand-md navbar-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">
@@ -35,8 +34,8 @@
                 data-bs-target="#navbar" data-bs-toggle="collapse" type="button">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <img src="static/palestine.png" height="50px">
-            <img src="static/egypt.svg" height="50px">
+            <img src="static/palestine.png" height="50px" width="">
+            <img src="static/egypt.svg" height="50px" style="margin-right: 20px;">
             <div class="collapse navbar-collapse" id="navbar">
                 {% if session["user_id"] %}
                 <ul class="navbar navbar-dark bg-dark me-auto mt-2">
