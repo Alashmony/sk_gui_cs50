@@ -7,12 +7,12 @@ ydata-profiling
 beautifulsoup4
 numba==0.58.1
 flask_session
-scikit-learn
+#scikit-learn
 openpyxl
 xlrd
 # levenshtein
 # regex
 # dataprep    
-duckdb
-sqlalchemy
+#duckdb
+#sqlalchemy
 markupsafe==2.0.1
