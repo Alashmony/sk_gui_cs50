@@ -5,11 +5,14 @@ Home
 {% endblock %}
 
 {% block main %}
-<h1 class="h1">Welcome to SkiKit-Learn GUI!</h1>
+<h1 class="h1">Welcome to Pandas GUI!</h1>
 <p class="lead">The final project for CS50 by Ahmad Aalashmony</p>
 
 {% if not username %}
-<img src="static/Alashmony.png" alt="Ahmad Alashmony" width="20%" height="20%" style="margin:10px 0px">
+<div style="padding-bottom: 50px;">
+    <img src="static/pandas.png" alt="Ahmad Alashmony" width="20%" height="20%" style="margin:10px 0px">
+    <h2 class="lead">Playground</h2>
+</div>
 <p class="lead">To start, you must <a type="button" href="/upload" class="btn btn-dark">upload your dataset</a></p>
 {% endif %}
 <h2>{{ notification }}</h2>

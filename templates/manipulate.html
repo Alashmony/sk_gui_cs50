@@ -7,28 +7,137 @@ Manipulate data
 {% block main %}
 {% if file %}
 
+
 <script>
     function getMethodDescription(descriptions) {
 
         var selectElement = document.getElementById("choose_method").value;
 
         // Update the description based on the selected value
-        document.getElementById("method_description").innerHTML = descriptions[selectElement]["description"];
-        document.getElementById("method_args").innerHTML = descriptions[selectElement]["args"];
+        document.getElementById("method_description").innerText = descriptions[selectElement]["description"];
+
+        argsnode = document.getElementById("method_args");
+        while (argsnode.hasChildNodes()) {
+            argsnode.removeChild(argsnode.lastChild);
+        }
+        size = 1;
+        let newOption = new Option("", "")
+        newOption.selected = true;
+        newOption.disabled = true;
+        argsnode.add(newOption);
+        for (i in descriptions[selectElement]["args"]) {
+            let newOption = new Option(descriptions[selectElement]["args"][i], descriptions[selectElement]["args"][i]);
+            //new_select = "<option>" + descriptions[selectElement]["args"][i] + "</option>"
+            argsnode.add(newOption);
+            size += 1;
+
+        }
+        argsnode.size = size;
+        functionhead = "df." + selectElement;
+        document.getElementById("function").value = functionhead + "(";
+        document.getElementById("code").value = "";
+        let columns_size = document.getElementById("columns").size;
+        document.getElementById("method_description").size = Math.max(size, columns_size)
+        //document.getElementById("columns").size = size;
+    }
+
+    function addArgument() {
+        let current_value = document.getElementById("code").value;
+        new_method = document.getElementById("method_args").value;
+        if (current_value == "") {
+            document.getElementById("code").value = current_value + new_method + "=";
+        }
+        else {
+            document.getElementById("code").value = current_value + "," + new_method + "=";
+        }
+    }
+
+    function addColumn() {
+        let current_value = document.getElementById("code").value;
+        new_column = document.getElementById("columns").value;
+        var cur_columns = current_value.slice(current_value.lastIndexOf("["), current_value.lastIndexOf("]") + 1);
+        let new_columns = ""
+        if (cur_columns == "") {
+            new_columns = "[\"" + new_column + "\"]";
+            document.getElementById("code").value = current_value + new_columns;
+        }
+        else {
+            new_columns = cur_columns.replace("]", ",\"" + new_column + "\"]");
+            document.getElementById("code").value = current_value.replace(cur_columns, new_columns);
+        }
+    }
+
+    function removeReset() {
+        number = document.getElementById("step_to_remove").value;
+        if (number == "") {
+            document.getElementById("remove_step").innerHTML = "Reset all steps";
+            document.getElementById("remove_step").disabled = false;
+        }
+        else if (number > 0) {
+            document.getElementById("remove_step").innerHTML = "Remove step " + number;
+            document.getElementById("remove_step").disabled = false;
+        }
+        else {
+            document.getElementById("step_to_remove").value = "";
+            document.getElementById("step_to_remove").innerText = "";
+            document.getElementById("remove_step").innerHTML = "Reset all steps";
+            document.getElementById("remove_step").disabled = true;
+        }
     }
 </script>
 
 <h1 class="h1">To manipulate data, choose the steps you need to do</h1>
+{% if error_msg %}
+<p class="lead" style="color: red;">{{ error_msg }}</p>
+{% endif %}
+{% if applied_steps %}
+<form class="form-inline" method="post" action="/remove_steps">
+    <input name="step_to_remove" id="step_to_remove" value="" autocomplete="off" type="number" onchange="removeReset()"
+        style="width: 50%;" min=1 placeholder="Enter step number to remove or leave blank to remove all">
+    <button type="submit" name="remove_step" id="remove_step">Reset all steps</button>
+</form>
+
+<table class="table table-hover table-striped">
+    <tr>
+        <th style="width: 20%;">Step</th>
+        <th style="width: 75%;">Command</th>
+        <!--<th style="width: 5%;">Remove</th>-->
+    </tr>
+    {% for step in applied_steps %}
+    <tr>
+        {% for val in step %}
+        <td>{{ val }}</td>
+        <td>{{ step[val] }}</td>
+        <!--<a href="/removestep" class="button-dark" name=val>Remove</a>-->
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+<form class="form-inline" method="post" action="/manipulate">
+    <div style="display: inline-block !important; width:90%;">
+        <label class="sr-only">Generated code:</label>
+        <input type="text" id="function" name="function" value="df." style="width: 10%; font-size: 13px;">
+        <input type="text" id="code" name="code" value="" style="width: 75%; font-size: 13px;"
+            placeholder="Code is generated here, you can edit it yourself also">
+        <input type="text" id="close" name="close" value=")" style="width: 3%; font-size: 13px;">
+    </div>
+    <button type="submit" class="btn btn-primary mb-2">Apply</button>
+</form>
 <table class="table table-striped">
     <tr>
         <th>Function</th>
         <th>Arguments</th>
-        <th>Description</th>
+        <th>Columns</th>
+        <th width="50%">Description</th>
     </tr>
     <tr>
         <td>
             <div>
-                <select id="choose_method" class="custom-select" onchange="getMethodDescription( {{ descriptions }})">
+                <select id="choose_method" class="form-control custom-select"
+                    onchange="getMethodDescription( {{ descriptions }})"><!--custom-select-->
+                    <option value="" disabled selected></option>
                     {% for method_ in methods_ %}
                     <option value={{ method_ }}>{{ method_ }}</option>
                     {% endfor %}
@@ -36,9 +145,24 @@ Manipulate data
             </div>
         </td>
         <td>
-            <p class="lead" id="method_args"></p>
+            <select class="form-control custom-select" id="method_args" onchange="addArgument()"
+                style="box-sizing: border-box!important;" size="1">
+            </select>
+            <option id="theNull" value="" disabled selected></option>
         </td>
-        <td style="font-size: 10px !important;" id="method_description">
+        <td>
+            {% if columns %}
+            <select class="form-control custom-select" id="columns" onchange="addColumn()" size={{ columnsize }}>
+                {% for column in columns %}
+                <option value={{ column }}>{{ column }}</option>
+                {% endfor %}
+            </select>
+            {% endif %}
+        </td>
+        <td style="font-size: 10px !important; text-align: left!important;">
+            <div class="scrollable" id="method_description">
+
+            </div>
         </td>
     </tr>
 </table>
