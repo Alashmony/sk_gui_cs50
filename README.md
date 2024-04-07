@@ -1,9 +1,14 @@
 # Pandas Playground
-To teach or show case pandas functions to students without the need to ask them to install python or prepare an environment
 
-Project will be deployed and puplished to a subdomain of [Alashmony.site](https://www.alashmony.site).
+#### Video Demo:  Here is a link to the project's [video](https://cs50-vid.alashmony.site/).
 
 # The project started as the final project for CS50
+
+#### Description:
+
+To teach or show case pandas functions to students without the need to ask them to install python or prepare an environment
+
+Project is deployed on [Render](https://render.com/) and you can check it via [Alashmony.site](https://pandas.alashmony.site).
 
 ## Current capabilities:
 
