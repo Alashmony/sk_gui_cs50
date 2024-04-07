@@ -5,11 +5,11 @@ To teach or show case pandas functions to students without the need to ask them 
 
 ## Current capabilities:
 
-    - Upload a dataset with "CSV", "XLS", or "XLSX" formats, no size limits yet.
-    - Generate a data exploration report (EDA) from [ydata-profiling](https://github.com/ydataai/ydata-profiling) .
-    - Create data manipulation steps with a GUI to show the output step-by-step.
-    - Remove steps and get back to the very first version "version 0" which is the uploaded dataset.
-    - Test the ability to remove a step within the steps and if applicable, it will be removed and other steps will be applied to the data.
+- Upload a dataset with "CSV", "XLS", or "XLSX" formats, no size limits yet.
+- Generate a data exploration report (EDA) from [ydata-profiling](https://github.com/ydataai/ydata-profiling) .
+- Create data manipulation steps with a GUI to show the output step-by-step.
+- Remove steps and get back to the very first version "version 0" which is the uploaded dataset.
+- Test the ability to remove a step within the steps and if applicable, it will be removed and other steps will be applied to the data.
 
 **Notes:**
 
