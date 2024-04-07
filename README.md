@@ -24,6 +24,7 @@ Project will be deployed and puplished to a subdomain of [Alashmony.site](https:
 - Add manipulation steps on the column level
 - Add the ability to have multiple dataframes in the same project.
 - Enable plotting data within the application.
+- Add SkiKit-Learn to run ML experiments online
 
 **Notes:**
 
