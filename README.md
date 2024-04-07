@@ -13,9 +13,9 @@ To teach or show case pandas functions to students without the need to ask them 
 
 **Notes:**
 
-    * the uploaded data, the uploaded file, and the steps you applied is related to your current session, you cannot get back to them.
-    * The uploaded files are only removed manually from the server, will be changed in future updated to automatic removals
-    * No login required
+* the uploaded data, the uploaded file, and the steps you applied is related to your current session, you cannot get back to them.
+* The uploaded files are only removed manually from the server, will be changed in future updated to automatic removals
+* No login required
 
 
 ## Future enhancements:
