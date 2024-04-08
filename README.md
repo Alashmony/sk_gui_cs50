@@ -1,6 +1,7 @@
 # Pandas Playground
 
-#### Video Demo:  Here is a link to the project's [video](https://cs50-vid.alashmony.site/).
+#### Video Demo:  Here is a link to the project's [video](https://cs50-vid.alashmony.site/) or on [YouTube](https://youtu.be/kbME6EuDnwg).
+The first 3 minuted is a description, the remaining 4 minutes are a Demo.
 
 # The project started as the final project for CS50
 
