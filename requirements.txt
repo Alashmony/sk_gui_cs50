@@ -17,3 +17,6 @@ xlrd
 #sqlalchemy
 markupsafe==2.0.1
 Gunicorn
+matplotlib
+werkzeug
+sqlalchemy

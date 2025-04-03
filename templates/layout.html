@@ -18,7 +18,7 @@
     <link href="/static/favicon.ico" rel="icon">
 
     <link href="/static/styles.css" rel="stylesheet">
-    <link href="/static/functions.js" rel="text/script">
+    <script src="/static/functions.js"></script>
 
     <title>Pandas playground: {% block title %}{% endblock %}</title>
 
@@ -26,96 +26,91 @@
 
 <body class="bodym">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <img src="static/pandas.png" alternative="Pandas" width="10%;" height="10%;" class="headimg">
-        <div class="container-fluid" style="width: 70%;">
+        <div class="container-fluid">
             <a class="navbar-brand" href="/">
-                <span class="blue">Playground</span>
+                <img src="/static/pandas.png" alt="Pandas" width="40" height="40" class="d-inline-block align-text-top">
+                <span class="blue">Pandas Playground</span>
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01"
-                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="collapse navbar-collapse" id="navbar">
-                {% if not user_id %}
-                <ul class="navbar-nav mr-auto">
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item"><a class="nav-link" href="/upload">Upload Dataset</a></li>
-                    <span class="nav-item"></span>
-                    <li class="nav-item"><a class="nav-link" href="/explore">Explore data</a></li>
-                    <span class="nav-item"></span>
-                    <li class="nav-item"><a class="nav-link" href="/manipulate">Manipulate data</a></li>
-                    <!--<li class="nav-item"><a class="nav-link" href="/train">Train a model</a></li>|
-                    <li class="nav-item"><a class="nav-link" href="/evaluate">Evaluate the model</a></li>|
-                    <li class="nav-item"><a class="nav-link" href="/predict">Make a prediction</a></li>-->
+                    
+                    {% if session.df %}
+                    <li class="nav-item"><a class="nav-link" href="/explore">Explore Data</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/manipulate">Manipulate Data</a></li>
+                    {% if session.user_id %}
+                    <li class="nav-item"><a class="nav-link" href="/plot">Visualize Data</a></li>
+                    {% endif %}
+                    {% endif %}
+                    
+                    {% if session.user_id %}
+                    <li class="nav-item"><a class="nav-link" href="/dashboard">My Projects</a></li>
+                    {% endif %}
                 </ul>
-
-                <!--<ul class="navbar-nav ms-auto mt-2">
-                    <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
-                </ul>-->
-                {% else %}
-                <!--<ul class="navbar-nav ms-auto mt-2">
-                    <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-                </ul>-->
-                {% endif %}
+                
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    {% if session.user_id %}
+                    <li class="nav-item"><span class="nav-link">Welcome, {{ session.username }}</span></li>
+                    <li class="nav-item"><a class="nav-link btn btn-outline-light btn-sm ms-2" href="/logout">Log Out</a></li>
+                    {% else %}
+                    <li class="nav-item"><a class="nav-link btn btn-outline-light btn-sm me-2" href="/login">Log In</a></li>
+                    <li class="nav-item"><a class="nav-link btn btn-primary btn-sm" href="/register">Register</a></li>
+                    {% endif %}
+                </ul>
             </div>
         </div>
-        <div class="collapse navbar-collapse" id="pal">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item "><a class="nav-link" style="color: --bs-nav-link-color;"
-                        href="https://en.wikipedia.org/wiki/State_of_Palestine">Proudly
-                        standing with </a></li>
-                <li><a href="https://en.wikipedia.org/wiki/State_of_Palestine"><img src="static/palestine.png"
-                            alt="Palestine" height="50px" width=""></a></li>
-                <!--<li><img src="static/egypt.svg" height="50px" style="margin-right: 20px;"></li>-->
-            </ul>
+        <div class="navbar-text px-3">
+            <a href="https://en.wikipedia.org/wiki/State_of_Palestine" class="text-decoration-none">
+                <span class="text-light me-2">Proudly standing with</span>
+                <img src="/static/palestine.png" alt="Palestine" height="40">
+            </a>
         </div>
     </nav>
 
     {% if get_flashed_messages() %}
-    <header>
-        <div class="alert alert-primary mb-0 text-center" role="alert">
+    <div class="container mt-3">
+        <div class="alert alert-primary alert-dismissible fade show" role="alert">
             {{ get_flashed_messages() | join(" ") }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
-    </header>
+    </div>
     {% endif %}
 
-    <main class="container py-5 text-center">
+    <main class="container py-5">
         {% block main %}{% endblock %}
     </main>
 
+    <footer class="bg-dark text-light py-4 mt-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-3"><strong>This is the final project for CS50.</strong> You can consider it an open source project but never remove the flags.</p>
+                </div>
+                <div class="col-md-3">
+                    <p class="mb-2"><strong>Contact me:</strong></p>
+                    <div class="mb-3">
+                        <a href="mailto:Ahmad@Alashmony.Site" class="text-light me-2"><img src="/static/email.png" width="20" height="20" alt="Email"></a>
+                        <a href="tel:+201092530258" class="text-light me-2"><img src="/static/phone.png" width="20" height="20" alt="Phone"></a>
+                        <a href="https://wa.me/+201092530258" class="text-light"><img src="/static/whatsapp.png" width="20" height="20" alt="WhatsApp"></a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <p class="mb-2"><strong>Follow me:</strong></p>
+                    <div>
+                        <a href="https://www.LinkedIn.com/in/Alashmony" class="text-light me-2"><img src="/static/linkedin.png" width="20" height="20" alt="LinkedIn"></a>
+                        <a href="https://www.x.com/AhmadAshmony" class="text-light"><img src="/static/x.png" width="20" height="20" alt="X"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
 
-
+    <!-- Custom script block for page-specific JavaScript -->
+    {% block scripts %}{% endblock %}
 </body>
-
-<footer>
-    <p class="footerp">
-        This is the final project for CS50, You can consider it an open source project but never remove the flags
-    </p>
-    <table class="table table-dark">
-        <tr>
-            <td>
-                <div class="footerl">
-                    <p class="footerp "><b>Contact me:</b></p><span></span>
-                    <a href="mailto:Ahmad@Alashmony.Site"><img class="nav-btn btn-dark" src="static/email.png"
-                            width="20px;" height="20px;"></a>
-                    <a href="tel:+201092530258"><img class="nav-btn btn-dark" src="static/phone.png" width="20px;"
-                            height="20px;"></a>
-                    <a href="https://wa.me/+201092530258"><img class="nav-btn btn-dark" src="static/whatsapp.png"
-                            width="20px;" height="20px;"></a>
-                </div>
-            </td>
-            <td>
-                <div class="footerl">
-                    <p class="footerp"><b>Follow me:</b></p>
-                    <a href="https://www.LinkedIn.com/in/Alashmony"><img class="nav-btn btn-dark"
-                            src="static/linkedin.png" width="20px;" height="20px;"></a>
-
-                    <a href="https://www.x.com/AhmadAshmony"><img class="nav-btn btn-dark footerico" src="static/x.png"
-                            width="20px;" height="20px;"></a>
-                </div>
-            </td>
-        </tr>
-    </table>
-</footer>
-
 </html>

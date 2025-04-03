@@ -1,0 +1,111 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Plot Data
+{% endblock %}
+
+{% block main %}
+    <h1 class="text-center mb-4">Data Visualization</h1>
+    
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Create Plot</h3>
+                </div>
+                <div class="card-body">
+                    <form action="/plot" method="post">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="plot_type" class="form-label">Plot Type</label>
+                                    <select class="form-select" id="plot_type" name="plot_type" required>
+                                        <option value="">Select a plot type</option>
+                                        <option value="line" {% if current_type == 'line' %}selected{% endif %}>Line</option>
+                                        <option value="scatter" {% if current_type == 'scatter' %}selected{% endif %}>Scatter</option>
+                                        <option value="bar" {% if current_type == 'bar' %}selected{% endif %}>Bar</option>
+                                        <option value="hist" {% if current_type == 'hist' %}selected{% endif %}>Histogram</option>
+                                        <option value="box" {% if current_type == 'box' %}selected{% endif %}>Box Plot</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="x_column" class="form-label">X-Axis Column</label>
+                                    <select class="form-select" id="x_column" name="x_column" required>
+                                        <option value="">Select column</option>
+                                        {% for col in columns %}
+                                            <option value="{{ col }}" {% if current_x == col %}selected{% endif %}>{{ col }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="y_column" class="form-label">Y-Axis Column</label>
+                                    <select class="form-select" id="y_column" name="y_column">
+                                        <option value="">Select column (not required for histogram)</option>
+                                        {% for col in columns %}
+                                            <option value="{{ col }}" {% if current_y == col %}selected{% endif %}>{{ col }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Plot Title (Optional)</label>
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ current_title }}">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                {% if plot_data %}
+                                <div class="text-center">
+                                    <img src="{{ plot_data }}" alt="Plot" class="img-fluid">
+                                </div>
+                                {% else %}
+                                <div class="text-center p-5 bg-light border">
+                                    <p class="text-muted">Plot will appear here</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">Generate Plot</button>
+                            <a href="/manipulate" class="btn btn-secondary">Back to Data</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Script to handle plot type selection
+    document.getElementById('plot_type').addEventListener('change', function() {
+        var plotType = this.value;
+        var yColumnField = document.getElementById('y_column');
+        
+        if (plotType === 'hist') {
+            // Histogram only needs one column
+            yColumnField.required = false;
+            document.querySelector('label[for="y_column"]').textContent = 'Y-Axis Column (Not required for histogram)';
+        } else {
+            // Other plot types need both columns
+            yColumnField.required = true;
+            document.querySelector('label[for="y_column"]').textContent = 'Y-Axis Column (Required)';
+        }
+    });
+    
+    // Trigger the event on page load if a plot type is selected
+    var plotTypeSelect = document.getElementById('plot_type');
+    if (plotTypeSelect.value) {
+        var event = new Event('change');
+        plotTypeSelect.dispatchEvent(event);
+    }
+</script>
+{% endblock %}

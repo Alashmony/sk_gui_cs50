@@ -5,35 +5,109 @@ Home
 {% endblock %}
 
 {% block main %}
-<h1 class="h1">Welcome to Pandas GUI!</h1>
-<p class="lead">The final project for CS50 by Ahmad Aalashmony</p>
+<div class="container">
+    <div class="text-center mb-5">
+        <img src="/static/pandas.png" alt="Pandas" class="img-fluid" style="max-width: 150px;">
+        <h1 class="display-4 mt-3">Welcome to Pandas Playground</h1>
+        <p class="lead">A powerful interactive platform for data analysis and visualization</p>
+    </div>
 
-{% if not username %}
-<div style="padding-bottom: 50px;">
-    <img src="static/pandas.png" alt="Ahmad Alashmony" width="20%" height="20%" style="margin:10px 0px">
-    <h2 class="lead">Playground</h2>
+    <div class="row mb-5">
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="card-title">Get Started</h3>
+                </div>
+                <div class="card-body">
+                    <p>Upload your dataset and start exploring, manipulating, and visualizing your data with ease.</p>
+                    <div class="d-grid gap-2">
+                        <a href="/upload" class="btn btn-primary">Upload Dataset</a>
+                        {% if session.user_id %}
+                        <a href="/dashboard" class="btn btn-outline-primary">View My Projects</a>
+                        {% else %}
+                        <a href="/register" class="btn btn-outline-primary">Create an Account</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card h-100">
+                <div class="card-header bg-info text-white">
+                    <h3 class="card-title">Features</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">📊 Interactive Data Visualization</li>
+                        <li class="list-group-item">📈 Comprehensive Data Analysis</li>
+                        <li class="list-group-item">🔄 Powerful Data Manipulation Tools</li>
+                        <li class="list-group-item">📁 Multiple Dataframe Management</li>
+                        <li class="list-group-item">💾 Project Saving & Loading</li>
+                        <li class="list-group-item">🔍 Column-level Operations</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="card-title">Upload</h4>
+                    <p class="card-text">Upload CSV and Excel files to start your data journey.</p>
+                    <div class="d-grid">
+                        <a href="/upload" class="btn btn-outline-primary btn-sm">Start Here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="card-title">Explore</h4>
+                    <p class="card-text">Get detailed insights about your data with automated profiling.</p>
+                    <div class="d-grid">
+                        <a href="/explore" class="btn btn-outline-primary btn-sm">Explore Data</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <h4 class="card-title">Manipulate</h4>
+                    <p class="card-text">Clean, filter, and transform your data with simple operations.</p>
+                    <div class="d-grid">
+                        <a href="/manipulate" class="btn btn-outline-primary btn-sm">Manipulate Data</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    {% if session.user_id %}
+    <div class="alert alert-success mt-4">
+        <h4 class="alert-heading">You're logged in!</h4>
+        <p>Unlock advanced features by creating a project in your <a href="/dashboard" class="alert-link">dashboard</a>.</p>
+    </div>
+    {% else %}
+    <div class="card mt-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <h4>Get the most out of Pandas Playground</h4>
+                    <p>Sign up to save your projects, work with multiple dataframes, create visualizations, and more!</p>
+                </div>
+                <div class="col-md-4 text-center">
+                    <div class="d-grid gap-2">
+                        <a href="/register" class="btn btn-primary">Register</a>
+                        <a href="/login" class="btn btn-outline-primary">Log In</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </div>
-<p class="lead">To start, you must <a type="button" href="/upload" class="btn btn-dark">upload your dataset</a></p>
-{% endif %}
-<h2>{{ notification }}</h2>
-
-<!--
-{% if username %}
-<table class="table table-striped">
-    <tr>
-        <th>Username</th>
-        <th>Cash</th>
-        <th>Total Stocks</th>
-        <th>Total Wealth</th>
-    </tr>
-    <tr width="25%" height="25%">
-        <td>{{ username }}</td>
-        <td>{{ cash }}</td>
-        <td>{{ total_stocks }}</td>
-        <td>{{ portfolio }}</td>
-    </tr>
-</table>
-{% endif %}-->
-
-
 {% endblock %}

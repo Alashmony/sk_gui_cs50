@@ -7,6 +7,68 @@ Manipulate data
 {% block main %}
 {% if file %}
 
+<!-- Navigation bar for authenticated users -->
+{% if is_authenticated %}
+<div class="mb-4">
+    <div class="card">
+        <div class="card-header">
+            <h3>Project: {{ project_name }}</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <h4>Dataframes in this project</h4>
+                    <div class="list-group">
+                        {% if dataframes %}
+                            {% for df in dataframes %}
+                                <a href="/switch_dataframe/{{ df.id }}" class="list-group-item list-group-item-action {% if current_dataframe_id == df.id %}active{% endif %}">
+                                    {{ df.name }}
+                                </a>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-muted">No dataframes available</p>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <h4>Actions</h4>
+                    <div class="d-grid gap-2">
+                        <a href="/dashboard" class="btn btn-primary">Dashboard</a>
+                        <a href="/plot" class="btn btn-info">Create Plot</a>
+                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addDataframeModal">
+                            Add New Dataframe
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal for adding a new dataframe -->
+<div class="modal fade" id="addDataframeModal" tabindex="-1" aria-labelledby="addDataframeModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addDataframeModalLabel">Add New Dataframe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/add_dataframe" method="post">
+                    <div class="mb-3">
+                        <label for="df_name" class="form-label">Dataframe Name</label>
+                        <input type="text" class="form-control" id="df_name" name="df_name" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
 
 <script>
     function getMethodDescription(descriptions) {
@@ -84,103 +146,197 @@ Manipulate data
             document.getElementById("remove_step").disabled = true;
         }
     }
+
+    function showColumnOperationsForm() {
+        document.getElementById("column-operations").style.display = "block";
+        document.getElementById("dataframe-operations").style.display = "none";
+    }
+    
+    function showDataframeOperationsForm() {
+        document.getElementById("column-operations").style.display = "none";
+        document.getElementById("dataframe-operations").style.display = "block";
+    }
 </script>
 
-<h1 class="h1">To manipulate data, choose the steps you need to do</h1>
+<h1 class="h1">Data Manipulation</h1>
+
+<div class="mb-3">
+    <button class="btn btn-primary" onclick="showDataframeOperationsForm()">Dataframe Operations</button>
+    <button class="btn btn-secondary" onclick="showColumnOperationsForm()">Column Operations</button>
+    {% if is_authenticated %}
+        <a href="/plot" class="btn btn-info">Visualization</a>
+    {% endif %}
+</div>
+
 {% if error_msg %}
-<p class="lead" style="color: red;">{{ error_msg }}</p>
+<div class="alert alert-danger">{{ error_msg }}</div>
 {% endif %}
+
 {% if applied_steps %}
 <form class="form-inline" method="post" action="/remove_steps">
     <input name="step_to_remove" id="step_to_remove" value="" autocomplete="off" type="number" onchange="removeReset()"
         style="width: 50%;" min=1 placeholder="Enter step number to remove or leave blank to remove all">
-    <button type="submit" name="remove_step" id="remove_step">Reset all steps</button>
+    <button type="submit" name="remove_step" id="remove_step" class="btn btn-warning">Reset all steps</button>
 </form>
 
 <table class="table table-hover table-striped">
     <tr>
         <th style="width: 20%;">Step</th>
         <th style="width: 75%;">Command</th>
-        <!--<th style="width: 5%;">Remove</th>-->
     </tr>
     {% for step in applied_steps %}
     <tr>
         {% for val in step %}
         <td>{{ val }}</td>
         <td>{{ step[val] }}</td>
-        <!--<a href="/removestep" class="button-dark" name=val>Remove</a>-->
         {% endfor %}
     </tr>
     {% endfor %}
 </table>
 {% endif %}
 
-<form class="form-inline" method="post" action="/manipulate">
-    <div style="display: inline-block !important; width:90%;">
-        <label class="sr-only">Generated code:</label>
-        <input type="text" id="function" name="function" value="df." style="width: 10%; font-size: 13px;">
-        <input type="text" id="code" name="code" value="" style="width: 75%; font-size: 13px;"
-            placeholder="Code is generated here, you can edit it yourself also">
-        <input type="text" id="close" name="close" value=")" style="width: 3%; font-size: 13px;">
-    </div>
-    <button type="submit" class="btn btn-primary mb-2">Apply</button>
-</form>
-<table class="table table-striped">
-    <tr>
-        <th>Function</th>
-        <th>Arguments</th>
-        <th>Columns</th>
-        <th width="50%">Description</th>
-    </tr>
-    <tr>
-        <td>
-            <div>
-                <select id="choose_method" class="form-control custom-select"
-                    onchange="getMethodDescription( {{ descriptions }})"><!--custom-select-->
-                    <option value="" disabled selected></option>
-                    {% for method_ in methods_ %}
-                    <option value={{ method_ }}>{{ method_ }}</option>
+<!-- Dataframe Operations Form -->
+<div id="dataframe-operations">
+    <h3>Dataframe Operations</h3>
+    <form class="form-inline" method="post" action="/manipulate">
+        <div style="display: inline-block !important; width:90%;">
+            <label class="sr-only">Generated code:</label>
+            <input type="text" id="function" name="function" value="df." style="width: 10%; font-size: 13px;">
+            <input type="text" id="code" name="code" value="" style="width: 75%; font-size: 13px;"
+                placeholder="Code is generated here, you can edit it yourself also">
+            <input type="text" id="close" name="close" value=")" style="width: 3%; font-size: 13px;">
+        </div>
+        <button type="submit" class="btn btn-primary mb-2">Apply</button>
+    </form>
+    <table class="table table-striped">
+        <tr>
+            <th>Function</th>
+            <th>Arguments</th>
+            <th>Columns</th>
+            <th width="50%">Description</th>
+        </tr>
+        <tr>
+            <td>
+                <div>
+                    <select id="choose_method" class="form-control custom-select"
+                        onchange="getMethodDescription( {{ descriptions }})">
+                        <option value="" disabled selected></option>
+                        {% for method_ in methods_ %}
+                        <option value={{ method_ }}>{{ method_ }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </td>
+            <td>
+                <select class="form-control custom-select" id="method_args" onchange="addArgument()"
+                    style="box-sizing: border-box!important;" size="1">
+                    <option id="theNull" value="" disabled selected></option>
+                </select>
+            </td>
+            <td>
+                {% if columns %}
+                <select class="form-control custom-select" id="columns" onchange="addColumn()" size={{ columnsize }}>
+                    {% for column in columns %}
+                    <option value={{ column }}>{{ column }}</option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+            </td>
+            <td style="font-size: 10px !important; text-align: left!important;">
+                <div class="scrollable" id="method_description">
+                </div>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<!-- Column Operations Form -->
+<div id="column-operations" style="display: none;">
+    <h3>Column Operations</h3>
+    <form method="post" action="/column_operation">
+        <div class="row mb-3">
+            <div class="col-md-4">
+                <label for="column_name" class="form-label">Select Column</label>
+                <select class="form-control" id="column_name" name="column_name" required>
+                    <option value="" disabled selected>Select a column</option>
+                    {% for column in columns %}
+                    <option value="{{ column }}">{{ column }}</option>
                     {% endfor %}
                 </select>
             </div>
-        </td>
-        <td>
-            <select class="form-control custom-select" id="method_args" onchange="addArgument()"
-                style="box-sizing: border-box!important;" size="1">
-            </select>
-            <option id="theNull" value="" disabled selected></option>
-        </td>
-        <td>
-            {% if columns %}
-            <select class="form-control custom-select" id="columns" onchange="addColumn()" size={{ columnsize }}>
-                {% for column in columns %}
-                <option value={{ column }}>{{ column }}</option>
-                {% endfor %}
-            </select>
-            {% endif %}
-        </td>
-        <td style="font-size: 10px !important; text-align: left!important;">
-            <div class="scrollable" id="method_description">
-
+            <div class="col-md-4">
+                <label for="operation" class="form-label">Operation</label>
+                <select class="form-control" id="operation" name="operation" required onchange="showOperationParams()">
+                    <option value="" disabled selected>Select operation</option>
+                    <option value="describe">Describe (Statistics)</option>
+                    <option value="value_counts">Value Counts</option>
+                    <option value="unique">Unique Values</option>
+                    <option value="fill_na">Fill NA Values</option>
+                    <option value="replace">Replace Values</option>
+                    <option value="map">Map Values</option>
+                    <option value="apply">Apply Function</option>
+                    <option value="astype">Change Type</option>
+                </select>
             </div>
-        </td>
-    </tr>
-</table>
+            <div class="col-md-4" id="op_params" style="display: none;">
+                <!-- This area will be populated based on the selected operation -->
+                <div id="param_fillna" style="display: none;">
+                    <label for="value" class="form-label">Fill Value</label>
+                    <input type="text" class="form-control" id="value" name="value" placeholder="Value to fill NA with">
+                </div>
+                <div id="param_replace" style="display: none;">
+                    <label for="to_replace" class="form-label">Replace</label>
+                    <input type="text" class="form-control" id="to_replace" name="to_replace" placeholder="Value to replace">
+                    <label for="value" class="form-label">With</label>
+                    <input type="text" class="form-control" id="value" name="value" placeholder="New value">
+                </div>
+                <div id="param_map_apply" style="display: none;">
+                    <label for="function" class="form-label">Function</label>
+                    <input type="text" class="form-control" id="function" name="function" placeholder="e.g., lambda x: x * 2">
+                </div>
+                <div id="param_astype" style="display: none;">
+                    <label for="dtype" class="form-label">Data Type</label>
+                    <select class="form-control" id="dtype" name="dtype">
+                        <option value="int">Integer</option>
+                        <option value="float">Float</option>
+                        <option value="str">String</option>
+                        <option value="bool">Boolean</option>
+                        <option value="category">Category</option>
+                        <option value="datetime">DateTime</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="d-grid gap-2">
+            <button type="submit" class="btn btn-primary">Apply Column Operation</button>
+        </div>
+    </form>
+</div>
+
 {% if rows and columns %}
-<table class="table table-dark table-striped table-hover">
-    <tr>
-        {% for column in columns %}
-        <th>{{ column }}</th>
-        {% endfor %}
-    </tr>
-    {% for row in rows %}
-    <tr>
-        {% for column in columns %}
-        <td>{{ row[column] }}</td>
-        {% endfor %}
-    </tr>
-    {% endfor %}
-</table>
+<div class="mt-4">
+    <h3>Data Preview</h3>
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    {% for column in columns %}
+                    <th>{{ column }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in rows %}
+                <tr>
+                    {% for column in columns %}
+                    <td>{{ row[column] }}</td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
 {% endif %}
 
 {% else %}
@@ -190,4 +346,34 @@ Manipulate data
 {% endif %}
 
 {% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Function to show parameters based on column operation selected
+    function showOperationParams() {
+        const operation = document.getElementById('operation').value;
+        document.getElementById('op_params').style.display = 'block';
+        
+        // Hide all parameter divs
+        document.getElementById('param_fillna').style.display = 'none';
+        document.getElementById('param_replace').style.display = 'none';
+        document.getElementById('param_map_apply').style.display = 'none';
+        document.getElementById('param_astype').style.display = 'none';
+        
+        // Show the relevant parameter div based on the operation
+        if (operation === 'fill_na') {
+            document.getElementById('param_fillna').style.display = 'block';
+        } else if (operation === 'replace') {
+            document.getElementById('param_replace').style.display = 'block';
+        } else if (operation === 'map' || operation === 'apply') {
+            document.getElementById('param_map_apply').style.display = 'block';
+        } else if (operation === 'astype') {
+            document.getElementById('param_astype').style.display = 'block';
+        } else {
+            // For describe, value_counts, unique
+            document.getElementById('op_params').style.display = 'none';
+        }
+    }
+</script>
 {% endblock %}
